@@ -50,6 +50,31 @@ class _HomePage2WidgetState extends State<HomePage2Widget>
 
 
 
+  Future<void> getUserData(String uid) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data();
+
+        // Accessing fields in the userData map
+        final String name = userData!['ramfree'];
+        final String email = userData['ramused'];
+
+        // Do something with the retrieved data
+        print('User Name: $name');
+        print('User Email: $email');
+      } else {
+        print('User not found');
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+
+
   late HomePage2Model _model;
   int charge = random_data.randomInteger(0, 100);
   //.toString();
@@ -64,8 +89,8 @@ class _HomePage2WidgetState extends State<HomePage2Widget>
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await getMemoryInfo();
     });
+    getUserData("bCy9k93Bmdg56xhgm4mgJhtyYB92");
     _model = createModel(context, () => HomePage2Model());
-
 
   }
 
@@ -84,7 +109,9 @@ class _HomePage2WidgetState extends State<HomePage2Widget>
     double nominator = double.parse(used);
     String total = (((map["ram"]["total"]).split(" "))[0]);
     double denominator = double.parse(total);
+
     return Scaffold(
+
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).background,
       body: SafeArea(
@@ -94,6 +121,7 @@ class _HomePage2WidgetState extends State<HomePage2Widget>
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
+
                 padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
